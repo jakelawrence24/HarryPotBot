@@ -2,6 +2,7 @@ import random
 import threading
 import smtplib
 
+# content
 punList = ["Why does voldemort only use twitter not facebook? \n\nBecause he only has followers not friends.",
            "On a scale from one to ten, how obsessed with Harry Potter are you? \n\nAbout nine and three quarters."
            "Why did Professor Snape stand in the middle of the road?\n\nSo you'll never know which side he's on.",
@@ -82,6 +83,7 @@ punList = ["Why does voldemort only use twitter not facebook? \n\nBecause he onl
            "Ron: Hermione, how many bones do you have in your body?\n\nHermione: Um, 206.\n\nRon: You want one more?",
            "The Dursleys went to Penn State"
            ]
+# subjects
 subList = ["Surprise it's HarryPotBot!",
            "HarryPotBot Strikes again!",
            "It's HarryPotBot...Bitch.",
@@ -96,7 +98,7 @@ subList = ["Surprise it's HarryPotBot!",
            "HarryPotBot can Lovegood",
            "HarryPotBot knows who did JFK; It was Penn State",
            ]
-
+# signatures
 sigList = ["Long live Hufflepuff",
            "Love",
            "+1 Hufflepuff",
@@ -114,33 +116,38 @@ sigList = ["Long live Hufflepuff",
 contentList = ['']
 
 def g():
+    # randomizing variables
     r = random.randint(0, len(punList) - 1)
     s = random.randint(0, len(subList) - 1)
     f = random.randint(0, len(sigList) - 1)
+    # length of the interval for which the function repeats
     t = 86400
 
+    # the email address of the account of which the email is being sent from
     senderEmail = ""
+    # the password of the account of which the email is being sent from
     senderPass = ""
+    # the email address of the account of which the email is being sent to
     recieverEmail = ""
-
+    # stylistic break within the email
     lineBreak = "-----------------\n"
-
+    # formatting of the content within the email
     content = punList[r] + "\n" "-------------------------------"+ lineBreak + sigList[f] + "," + "\nHarryPotBot\n" + lineBreak + "Total Points earned for Hufflepuff by HarryPotBot: %s" % (len(contentList) + 1)
+    # adds the most recent email to the list of sent emails to log sent data
     contentList.append(content)
-
+    # initialization of email server
     mail = smtplib.SMTP('smtp.gmail.com', 587)
-
+    # initialization of the mail driver
     mail.ehlo()
-
     mail.starttls()
-
+    # complete formatting of message
     message = 'Subject: %s\n\n%s' % (subList[s] + " -- HPB #%s" %(len(contentList)), content)
-
+    # mail sender info
     mail.login('senderEmail', 'senderPass')
-
+    # sending mail to specified parameters
     mail.sendmail('senderEmail', 'recieverEmail', message)
-
-    threading.Timer(10, g).start()
+    # drags out the end of the function for t seconds
+    threading.Timer(t, g).start()
 
 # start calling f now and every t sec thereafter
 g()
